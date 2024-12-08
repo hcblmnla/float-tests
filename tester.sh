@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [[ $# -lt 4 || $# -gt 5 ]]; then
-  echo "Usage: sh tester.sh <round> <bits> <operation> <mode> [limit]"
+if [[ $# -lt 3 || $# -gt 4 ]]; then
+  echo "Usage: sh tester.sh <round> <bits> <operation> [limit]"
   exit 1
 fi
 
@@ -33,14 +33,8 @@ case $OP in
   *) echo "Invalid operation: $OP" ; exit 1 ;;
 esac
 
-MODE=$4
-
-if [[ "$MODE" != "lite" && "$MODE" != "hard" ]]; then
-  echo "Unknown mode: $MODE" ; exit 1
-fi
-
-if [[ $# -eq 5 ]]; then
-  LIMIT=$5
+if [[ $# -eq 4 ]]; then
+  LIMIT=$4
   OUTPUT=1
 else
   LIMIT=46464
@@ -77,8 +71,7 @@ while IFS= read -r line; do
     echo "  Running on $ALL test"
   fi
 
-  # NOTE: optimize
-  if [[ "$MODE" == "lite" && "$EXPECTED" == "$FOUND" || "$MODE" == "hard" && "$EXPECTED $C" == "$FOUND" ]]; then
+  if [[ "$EXPECTED" == "$FOUND" ]]; then
     PASSED=$((PASSED + 1))
   else
     echo "Test $ALL. Expected $EXPECTED, but found $FOUND, where $A $SIGN $B"
